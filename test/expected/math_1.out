@@ -1,0 +1,93 @@
+\set ECHO None
+\set c1 (1,2)::complex
+\set c2 (1,1)::complex
+\set c3 (3,4)::complex
+\set c4 (3,8)::complex
+SELECT 1::complex AS a, (1::int8)::complex AS b, 1.0::complex AS c;
+   a   |   b   |   c   
+-------+-------+-------
+ (1,0) | (1,0) | (1,0)
+(1 row)
+
+SELECT (1,2)::complex AS a, -(1,2)::complex AS b, ~(1,2)::complex AS c;
+   a   |    b    |   c    
+-------+---------+--------
+ (1,2) | (-1,-2) | (1,-2)
+(1 row)
+
+SELECT :c1 + (3,4)::complex AS a, 3 + :c1 AS b, :c1 + 3 AS c;
+   a   |   b   |   c   
+-------+-------+-------
+ (4,6) | (4,2) | (4,2)
+(1 row)
+
+SELECT :c1 - (3,6)::complex AS a, 3 - :c1 AS b, :c1 - 3 AS c;
+    a    |   b    |   c    
+---------+--------+--------
+ (-2,-4) | (2,-2) | (-2,2)
+(1 row)
+
+SELECT :c1 * (3,5)::complex AS a, 3 * :c1 AS b, :c1 * 3 AS c;
+    a    |   b   |   c   
+---------+-------+-------
+ (-7,11) | (3,6) | (3,6)
+(1 row)
+
+SELECT :c1 * (3,5)::complex AS a, 3.0::double precision * :c1 AS b, :c1 * 3.0 AS c;
+    a    |   b   |   c   
+---------+-------+-------
+ (-7,11) | (3,6) | (3,6)
+(1 row)
+
+SELECT :c4 / :c1  AS a, (:c4 / :c1) * :c1 = :c4 AS b;
+     a     | b 
+-----------+---
+ (3.8,0.4) | t
+(1 row)
+
+SELECT :c4 / (2,0)::complex AS a, (2,0)::complex * (:c4 / (2,0)::complex)  = :c4 AS b;
+    a    | b 
+---------+---
+ (1.5,4) | t
+(1 row)
+
+SELECT :c4 / (0,2)::complex AS a, (0,2)::complex * (:c4 / (0,2)::complex) = :c4 AS b;
+    a     | b 
+----------+---
+ (4,-1.5) | t
+(1 row)
+
+SELECT :c4 / 3 AS a, 3 * (:c4 / 3) = :c4 AS b;
+           a            | b 
+------------------------+---
+ (1,2.6666666666666665) | t
+(1 row)
+
+SELECT 3 / :c4 AS a, :c4 * (3 / :c4) = 3::complex AS b;
+                    a                     | b 
+------------------------------------------+---
+ (0.1232876712328767,-0.3287671232876712) | t
+(1 row)
+
+--
+-- check magnitude
+--
+SELECT magnitude(:c1) AS magnitude;
+    magnitude     
+------------------
+ 2.23606797749979
+(1 row)
+
+SELECT magnitude(:c2) AS magnitude;
+     magnitude      
+--------------------
+ 1.4142135623730951
+(1 row)
+
+SELECT magnitude(:c3) AS magnitude;
+ magnitude 
+-----------
+         5
+(1 row)
+
+ROLLBACK;

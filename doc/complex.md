@@ -67,7 +67,7 @@ Support
 -------
 
 The most recent version of this project can be found at 
-http://github.com/beargiles/pg_complex.
+http://github.com/beargiles/pg-complex.
 
 
 Author

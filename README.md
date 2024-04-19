@@ -44,14 +44,13 @@ package management system such as RPM to install PostgreSQL, be sure that the
 `-devel` package is also installed. If necessary tell the build process where
 to find it:
 
-    env PG_CONFIG=/path/to/pg_config make && make installcheck && make install
+    env PG_CONFIG=/path/to/pg_config make && make install && make installcheck
 
-And finally, if all that fails (and if you're on PostgreSQL 8.1 or lower, it
-likely will), copy the entire distribution directory to the `contrib/`
-subdirectory of the PostgreSQL source tree and try it there without
+And finally, if all that fails, copy the entire distribution directory to the
+`contrib/` subdirectory of the PostgreSQL source tree and try it there without
 `pg_config`:
 
-    env NO_PGXS=1 make && make installcheck && make install
+    env NO_PGXS=1 make && make install && make installcheck
 
 If you encounter an error such as:
 
@@ -62,27 +61,10 @@ You need to run the test suite using a super user, such as the default
 
     make installcheck PGUSER=postgres
 
-Once pg_complex is installed, you can add it to a database. If you're running
-PostgreSQL 9.1.0 or greater, it's a simple as connecting to a database as a
-super user and running:
+Once pg_complex is installed, you can add it to a database by connecting to a
+database as a super user and running:
 
     CREATE EXTENSION pg_complex;
-
-If you've upgraded your cluster to PostgreSQL 9.1 and already had pg_complex
-installed, you can upgrade it to a properly packaged extension with:
-
-    CREATE EXTENSION pg_complex FROM unpackaged;
-
-For versions of PostgreSQL less than 9.1.0, you'll need to run the
-installation script:
-
-    psql -d mydb -f /path/to/pgsql/share/contrib/pg_complex.sql
-
-If you want to install pg_complex and all of its supporting objects into a specific
-schema, use the `PGOPTIONS` environment variable to specify the schema, like
-so:
-
-    PGOPTIONS=--search_path=extensions psql -d mydb -f pg_complex.sql
 
 Dependencies
 ------------
